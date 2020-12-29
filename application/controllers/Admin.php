@@ -9,15 +9,53 @@ class Admin extends CI_Controller {
 		$this->load->model("message_model");
 		$this->load->model("visit_model");
 		$this->load->model("parameters_model");
+    $this->load->library('session');
 	}
+
+  public function login()
+  {
+    if($this->session->has_userdata("username"))
+      redirect("Admin/index");
+
+    $this->load->view('admin/include/header');
+    $this->load->view('admin/login');
+  }
+
+  public function authenticate_login()
+  {
+    $username = $this->parameters_model->get_parameter("LGN_USERNAME")[0]->value;
+    $password = $this->parameters_model->get_parameter("LGN_PASSWORD")[0]->value;
+
+    if($_POST['username'] == $username && md5($_POST['password']) == $password)
+    {
+      $this->session->unset_userdata("violation");
+      $this->session->set_userdata("username", $username);
+      redirect("Admin/index");
+    }
+
+    else{
+      $this->session->set_userdata("violation", "Username and password does not match.");
+      redirect("Admin/login");
+    }
+  }
+
+  public function logout()
+  {
+    $this->session->unset_userdata("username");
+    redirect("Admin/login");
+  }
 
 	public function index()
 	{
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     $data['views'] = $this->visit_model->get_by_date_visit();
     $data['message_counts'] = $this->message_model->get_by_date_message();
     $data['visits'] = $this->visit_model->get_all_views();
     $data['messages'] = $this->message_model->get_messages();
     $this->load->view('admin/include/header');
+    $this->load->view('admin/include/navbar');
 		$this->load->view('admin/dashboard', $data);
     $this->load->view('admin/include/footer');
 	}
@@ -25,9 +63,13 @@ class Admin extends CI_Controller {
 
   public function messages()
   {
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     $data['messages'] = $this->message_model->get_messages();
 
     $this->load->view('admin/include/header');
+    $this->load->view('admin/include/navbar');
 		$this->load->view('admin/messages', $data);
     $this->load->view('admin/include/footer');
   }
@@ -49,22 +91,33 @@ class Admin extends CI_Controller {
 
   public function template()
   {
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     $data['template'] = $this->parameters_model->get_parameter("MSG_TEMPLATE");
     $this->load->view('admin/include/header');
+    $this->load->view('admin/include/navbar');
 		$this->load->view('admin/template', $data);
     $this->load->view('admin/include/footer');
   }
 
   public function words()
   {
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     $data['words'] = $this->word_model->get_words();
     $this->load->view('admin/include/header');
+    $this->load->view('admin/include/navbar');
 		$this->load->view('admin/words', $data);
     $this->load->view('admin/include/footer');
   }
 
   public function delete_word()
   {
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     $this->word_model->delete_word($_POST['id']);
 
     $words = $this->word_model->get_words();
@@ -91,11 +144,17 @@ class Admin extends CI_Controller {
 
   public function save_template()
   {
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     echo $this->parameters_model->save($_POST['value'], "MSG_TEMPLATE");
   }
 
   public function send_cv()
   {
+    if(!$this->session->has_userdata("username"))
+      redirect("Admin/login");
+
     $user = $this->message_model->get_message($_POST['id']);
 
     $this->load->library('phpmailer_lib');
