@@ -107,7 +107,7 @@ h1 {
     scroll-snap-points-y: repeat(100vh);
     scroll-snap-type: y mandatory;
     height: 100vh;
-    overflow: scroll; } }
+    overflow-y: scroll; } }
 
 #landing {
   background-color: #FFFFFF; }
