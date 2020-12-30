@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An overview of Chino's background and recent work.">
+    <meta name="keywords" content="<?php foreach($words as $word){echo $word->word.", ";}?>">
+    <meta name="author" content="Chino Tan Ismail">
     <title>Chino Tan Ismail</title>
     <link rel="icon" href="<?php echo asset_url();?>img/favicon.png" sizes="16x16" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
@@ -20,7 +23,7 @@
           </div>
           <div class="title">
             <h2>CHINO TAN ISMAIL</h2>
-            <h4>Résumé</h4>
+            <h4>The IT Guy</h4>
           </div>
         </div>
       </section>
@@ -170,7 +173,7 @@
         </div>
       </section>
       <section id="contact">
-        <h1>Contact.</h1>
+        <h1>Let's Discuss.</h1>
         <div class="content">
           <div class="inputs">
             <div class="input-form">
@@ -193,7 +196,7 @@
               </a>
             </div>
             <div class="input-form send-button">
-              <a href="javascript:void(0);" id="send">Send</a>
+              <a href="javascript:void(0);" id="send">send</a>
             </div>
           </div>
         </div>
