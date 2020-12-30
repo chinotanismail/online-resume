@@ -62,7 +62,7 @@
 
 <script src="<?php echo admin_asset_url();?>vendor/chart.js/Chart.min.js"></script>
 <script type="text/javascript">
-  var label_area = ['<?php foreach($views as $view){  echo $view->date_visit."','"; } ?>'];
+  var label_area = ['<?php foreach($views as $view){  echo $view->the_date."','"; } ?>'];
   var data_area = ['<?php foreach($views as $view){  echo $view->count."','"; } ?>'];
   var message_data = ['<?php foreach($message_counts as $message_count){  echo $message_count->count."','"; } ?>'];
 </script>

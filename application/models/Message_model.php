@@ -60,7 +60,23 @@ class Message_model extends CI_Model {
 
   public function get_by_date_message()
   {
-    return $this->db->select("date_format(date(date_received), '%d-%b') AS date_received, COUNT(*) AS count")->from($this->_table)->group_by("date_format(date(date_received), '%d-%b')")->order_by("CAST(date_received as datetime) ASC")->get()->result();
+    $date_raw = date("r");
+    $query  =   "SET @date_min := '".date('Y-m-d', strtotime('-14 day', strtotime($date_raw)))."', @date_max := '".date('Y-m-d', strtotime($date_raw))."'";
+    $this->db->query($query);
+
+    $new_query  =   "
+      SELECT
+      date_generator.date as the_date,
+      IFNULL(COUNT(".$this->_table.".date_received), 0) as count
+      FROM (
+      select DATE_ADD(@date_min, INTERVAL (@i:=@i+1)-1 DAY) as `date`
+      from information_schema.columns,(SELECT @i:=0) gen_sub
+      where DATE_ADD(@date_min,INTERVAL @i DAY) BETWEEN @date_min AND @date_max
+      ) date_generator
+      left join `".$this->_table."` on DATE(date_received) = date_generator.date
+      GROUP BY date;";
+
+    return $this->db->query($new_query)->result();
   }
 
   public function set_cv_sent($id)
