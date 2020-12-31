@@ -53,8 +53,10 @@ class Home extends CI_Controller {
     $mail->addReplyTo($_POST['email_address'], $_POST['name']);
     $mail->addAddress('chino.ismail@gmail.com');
     $mail->Subject = 'New Message from '.$_POST['name'];
-    $mail->isHTML(true);
-    $mail->Body = $_POST['message'];
+		$mail->isHTML(true);
+    $mail->Body = $_POST['message']."<br/><br/>----------<br/>View this message on <a href='http://chinotanismail.com/Admin'>chinotanismail.com</a>";
+
+    $mail->send();
 
 		echo $this->message_model->save($_POST);
 	}
